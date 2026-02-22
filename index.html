@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio Personnel | Profil Consultant</title>
+    
+    <!-- Importation des polices Google Fonts (Montserrat pour les titres, Open Sans pour le texte) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800&family=Open+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* ==========================================================================
+           VARIABLES DE COULEURS ET DE STYLE (Inspiration IÉSEG Conseil)
+           ========================================================================== */
+        :root {
+            --navy-blue: #001534;       /* Bleu marine profond */
+            --yellow-accent: #ffb703;   /* Jaune éclatant */
+            --light-gray: #f7f9fa;      /* Gris très clair pour les sections */
+            --white: #ffffff;           /* Blanc pur */
+            --text-dark: #333333;       /* Couleur de texte standard */
+            --text-light: #666666;      /* Couleur de texte secondaire */
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        /* ==========================================================================
+           RESETS & BASE
+           ========================================================================== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Open Sans', sans-serif;
+            color: var(--text-dark);
+            background-color: var(--white);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--navy-blue);
+            line-height: 1.2;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* ==========================================================================
+           GESTION DE LA SINGLE PAGE APPLICATION (SPA)
+           ========================================================================== */
+        .view {
+            display: none;
+            opacity: 0;
+        }
+
+        .view.active {
+            display: block;
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(15px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ==========================================================================
+           EN-TÊTE ET FOOTER GLOBAUX
+           ========================================================================== */
+        header.global-header {
+            background-color: var(--white);
+            padding: 20px 5%;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--navy-blue);
+            cursor: pointer;
+        }
+
+        .logo-text span {
+            color: var(--yellow-accent);
+        }
+
+        footer {
+            background-color: var(--navy-blue);
+            color: var(--white);
+            text-align: center;
+            padding: 30px 20px;
+            margin-top: auto;
+        }
+
+        /* ==========================================================================
+           COMPOSANTS BOUTONS
+           ========================================================================== */
+        .btn {
+            display: inline-block;
+            padding: 15px 35px;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            border-radius: 4px;
+            cursor: pointer;
+            border: none;
+            transition: var(--transition);
+            font-size: 1rem;
+        }
+
+        .btn-primary {
+            background-color: var(--yellow-accent);
+            color: var(--navy-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: #e5a400;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(255, 183, 3, 0.4);
+        }
+
+        .btn-back {
+            background: transparent;
+            color: var(--navy-blue);
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 600;
+            font-size: 1.1rem;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 30px;
+            display: inline-flex;
+            align-items: center;
+            transition: var(--transition);
+        }
+
+        .btn-back:hover {
+            color: var(--yellow-accent);
+            transform: translateX(-5px);
+        }
+
+        /* ==========================================================================
+           PAGE D'ACCUEIL : HERO SECTION
+           ========================================================================== */
+        .hero {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            min-height: 80vh;
+            padding: 5% 10%;
+            background-color: var(--white);
+            gap: 50px;
+        }
+
+        .hero-content {
+            flex: 1;
+            max-width: 600px;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 40px;
+        }
+
+        .hero-visual {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+
+        /* Forme géométrique derrière l'image (Inspiration pro/moderne) */
+        .hero-img-wrapper {
+            position: relative;
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .hero-img-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -20px;
+            right: -20px;
+            bottom: 20px;
+            left: 20px;
+            background-color: var(--yellow-accent);
+            border-radius: 8px;
+            z-index: 1;
+        }
+
+        .hero-img {
+            width: 100%;
+            height: auto;
+            border-radius: 8px;
+            position: relative;
+            z-index: 2;
+            box-shadow: 0 10px 30px rgba(0, 21, 52, 0.15);
+        }
+
+        /* ==========================================================================
+           PAGE D'ACCUEIL : SECTION THÉMATIQUES (CARTES)
+           ========================================================================== */
+        .themes-section {
+            background-color: var(--light-gray);
+            padding: 80px 10%;
+        }
+
+        .themes-section h2 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .themes-section h2::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: var(--yellow-accent);
+            margin: 15px auto 0;
+            border-radius: 2px;
+        }
+
+        .themes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: var(--white);
+            padding: 40px 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+            cursor: pointer;
+            transition: var(--transition);
+            position: relative;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        /* Effet de soulignement dynamique au survol */
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 4px;
+            width: 0;
+            background-color: var(--yellow-accent);
+            transition: var(--transition);
+        }
+
+        .card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(0, 21, 52, 0.1);
+        }
+
+        .card:hover::after {
+            width: 100%;
+        }
+
+        .card-icon {
+            width: 60px;
+            height: 60px;
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            /* Placeholder pour l'icône de la carte */
+            background-image: url('https://via.placeholder.com/60x60/f7f9fa/001534?text=Icon');
+            background-size: cover;
+            transition: var(--transition);
+        }
+
+        .card:hover .card-icon {
+            transform: scale(1.1);
+        }
+
+        .card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            min-height: 60px; /* Force tous les titres à prendre l'espace de 2 lignes */
+        }
+        }
+
+        .card p {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+
+        /* ==========================================================================
+           PAGES DE DÉTAILS : STRUCTURE CENTRALE
+           ========================================================================== */
+        .detail-page {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 60px 5%;
+            min-height: 80vh;
+        }
+
+        .detail-page h2.page-title {
+            font-size: 3rem;
+            margin-bottom: 40px;
+            border-bottom: 2px solid var(--light-gray);
+            padding-bottom: 20px;
+        }
+
+        .content-block {
+            font-size: 1.1rem;
+            color: var(--text-dark);
+            margin-bottom: 30px;
+        }
+
+        .content-block p { margin-bottom: 20px; }
+        .content-block ul { margin-bottom: 20px; padding-left: 20px; }
+        .content-block li { margin-bottom: 10px; }
+
+        /* ==========================================================================
+           SPÉCIFICITÉS : PAGE 1 (Mosaïque)
+           ========================================================================== */
+        .mosaic-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            grid-auto-rows: 250px;
+            gap: 15px;
+            margin-bottom: 40px;
+        }
+
+        .mosaic-item {
+            background-color: var(--light-gray);
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .mosaic-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .mosaic-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* La première image prend plus de place */
+        .mosaic-item:nth-child(1) {
+            grid-column: span 2;
+            grid-row: span 2;
+        }
+
+        /* ==========================================================================
+           SPÉCIFICITÉS : PAGE 2 (Logos Asso Circulaires)
+           ========================================================================== */
+        .asso-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .asso-item {
+            text-align: center;
+        }
+
+        .asso-logo {
+            width: 160px;
+            height: 160px;
+            border-radius: 50%;
+            object-fit: contain; /* <-- Empêche l'image d'être coupée */
+            background-color: var(--white); /* <-- Ajoute un fond blanc propre */
+            margin: 0 auto 20px;
+            box-shadow: 0 8px 20px rgba(0, 21, 52, 0.1);
+            border: 5px solid var(--white);
+            transition: var(--transition);
+        }
+
+        .asso-item:hover .asso-logo {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0, 21, 52, 0.15);
+            border-color: var(--yellow-accent);
+        }
+
+        .asso-item h4 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .asso-item p {
+            font-size: 0.95rem;
+            color: var(--text-light);
+        }
+
+        /* ==========================================================================
+           SPÉCIFICITÉS : PAGES 3 & 4 (Bannières)
+           ========================================================================== */
+        .banner-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0, 21, 52, 0.1);
+        }
+
+        /* ==========================================================================
+           RESPONSIVE DESIGN
+           ========================================================================== */
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+                padding-top: 10%;
+            }
+            .hero-content {
+                max-width: 100%;
+            }
+            .hero h1 { font-size: 2.8rem; }
+            .hero-img-wrapper::before { display: none; } /* Simplification sur mobile */
+            
+            .mosaic-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+            .mosaic-item:nth-child(1) { grid-column: span 2; grid-row: span 1; }
+
+            .asso-grid { grid-template-columns: 1fr 1fr; }
+        }
+
+        @media (max-width: 600px) {
+            .hero h1 { font-size: 2.2rem; }
+            .themes-section { padding: 50px 5%; }
+            .mosaic-grid { grid-template-columns: 1fr; }
+            .mosaic-item:nth-child(1) { grid-column: span 1; }
+            .asso-grid { grid-template-columns: 1fr; }
+            .detail-page h2.page-title { font-size: 2rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Optionnel pour marquer le style Corporate -->
+    <header class="global-header" style="display: flex; justify-content: space-between; align-items: center;">
+        <div class="logo-text" onclick="navigateTo('home')">Valentin<span>Rozuel</span></div>
+        <a href="mailto:valentin.rozuel@ieseg.fr" class="btn btn-primary" style="padding: 10px 20px; font-size: 0.9rem;">Me contacter</a>
+    </header>
+
+    <main id="app">
+        
+        <!-- =========================================================================
+             VUE : PAGE D'ACCUEIL
+             ========================================================================= -->
+        <section id="view-home" class="view active">
+            <!-- Hero Section -->
+            <div class="hero">
+                <div class="hero-content">
+                    <!-- Insérez votre Titre principal ici -->
+                    <h1>Hello la team ICL !</h1>
+                    <!-- Insérez votre paragraphe de présentation ici -->
+                    <p>Moi c'est Valentin et je suis hyper motivé pour rejoindre la JE l'année prochaine en tant que Respo Consulting. J'ai hâte de (enfin j'espère) vous voir aux entretiens ;) Je vous laisse avec ma CB.</p>
+                    <button class="btn btn-primary" onclick="scrollToThemes()">Découvrez l'offre qui vous correspond</button>
+                </div>
+                <div class="hero-visual">
+                    <div class="hero-img-wrapper">
+                        <!-- Insérez votre photo de profil ici (Remplacer le src) -->
+                        <img src="ma-photo-profil.jpg" alt="Portrait" class="hero-img">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Section "Mes Thématiques" -->
+            <div class="themes-section" id="themes">
+                <h2>Les points essentiels</h2>
+                <div class="themes-grid">
+                    
+                    <!-- Bloc 1 -->
+                    <div class="card" onclick="navigateTo('page-1')">
+                        <div class="card-icon" style="background-image: url('icone-qui-suis-je.jpeg');"></div>
+                        <h3>Qui suis-je ?</h3>
+			<p>Je suis en troisième année à l'IESEG, grand voyageur à mes heures perdues (Thaïlande, Vietnam, People...), je suis aussi sportif (objectif Marathon de Lille) et je suis cool aussi en vrai</p>
+                    </div>
+
+                    <!-- Bloc 2 -->
+                    <div class="card" onclick="navigateTo('page-2')">
+                        <div class="card-icon" style="background-image: url('icone-asso.png');"></div>
+                        <h3>Mes expériences Asso</h3>
+                        <p>Après trois ans à l'IESEG, j'ai enfin eu assez d'assos pour pouvoir avoir un nom facebook presque aussi long que le grand Valentin Carpentier: Valentin Otd Ctr Bdj AEIL pas fédé pas encore ICL Rozuel</p>
+                    </div>
+
+                    <!-- Bloc 3 -->
+                    <div class="card" onclick="navigateTo('page-3')">
+                        <div class="card-icon" style="background-image: url('icone-respo.jpg');"></div>
+                        <h3>Respo Consulting</h3>
+                        <p>En premier choix, le poste de Respo Consulting m'intéresse beaucoup pour pouvoir être en contact direct avec les clients et proposer des solutions concrètes à leurs problèmes</p>
+                    </div>
+
+                    <!-- Bloc 4 -->
+                    <div class="card" onclick="navigateTo('page-4')">
+                        <div class="card-icon" style="background-image: url('icone-suivietudes.png');"></div>
+                        <h3>Respo Suivi d'études</h3>
+                        <p>En 2e choix je suis aussi intéressé par le poste de Respo Suivi d'études. Je trouve l'étape d'exécution du contrat hyper intéressante et concrète.</p>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =========================================================================
+             VUE : PAGE 1 - QUI SUIS-JE ?
+             ========================================================================= -->
+        <section id="view-page-1" class="view detail-page">
+            <button class="btn-back" onclick="navigateTo('home')">&#8592; Retour à l'accueil</button>
+            <h2 class="page-title">Qui suis-je ?</h2>
+            
+            <!-- Mosaïque d'images -->
+            <div class="mosaic-grid">
+                <div class="mosaic-item"><img src="mosaique-1.jpeg" alt="Photo principale"></div>
+                <div class="mosaic-item"><img src="mosaique-2.jpeg" alt="Voyage"></div>
+                <div class="mosaic-item"><img src="mosaique-3.jpeg" alt="Projet"></div>
+                <div class="mosaic-item"><img src="mosaique-4.jpeg" alt="Équipe"></div>
+                <div class="mosaic-item"><img src="mosaique-5.jpeg" alt="Sport"></div>
+            </div>
+
+            <div class="content-block">
+                <!-- Insérez votre texte de présentation complet ici -->
+                <p>Salut ! Moi c'est Valentin. Pour ceux qui ne me connaissent pas encore (presque vous tous en vrai haha) je suis quelqu'un d'organisé mais aussi de sociable. Comme vous pouvez le voir sur les photos (avec des personnes qui m'ont pris en stop au milieu de la Thaïlande), je suis passionné de sport, de voyages et de rencontres en dehors de mon espace de confort (pratique pour un respo consulting).</p>
+                <p>J'ai également le sens du travail grâce aux différentes expériences assos que vous pourrez voir dans une des pages du site. Après 3 ans à l'IESEG, j'ai toujours aimé m'impliquer à fond dans de nouveaux projets et apprendre grâce à eux.</p>
+            </div>
+        </section>
+
+
+        <!-- =========================================================================
+             VUE : PAGE 2 - MES EXPÉRIENCES ASSO
+             ========================================================================= -->
+        <section id="view-page-2" class="view detail-page">
+            <button class="btn-back" onclick="navigateTo('home')">&#8592; Retour à l'accueil</button>
+            <h2 class="page-title">Mes expériences Asso</h2>
+            
+            <div class="content-block">   
+            </div>
+
+            <!-- Grille des 4 Logos Circulaires -->
+            <div class="asso-grid">
+                <!-- Logo / Asso 1 -->
+                <div class="asso-item">
+                    <!-- Insérez le logo de l'association -->
+                    <img src="logo-asso-1.png" alt="Nom de l'asso 1" class="asso-logo">
+                    <h4>IESEG Outdoor</h4>
+                    <!-- Insérez un court texte descriptif -->
+                    <p>Arrivé en 1ère année en membre sponsor, j'ai eu la chance de pouvoir finir président de l'asso et organiser magnifique évent qu'est la Flo'werun (j'espère que vous êtes venus🧐) pour lequel nous avons négocié un partenariat avec Finishers pour battre le record de ventes (youpi)</p>
+                </div>
+                
+                <!-- Logo / Asso 2 -->
+                <div class="asso-item">
+                    <img src="logo-asso-2.png" alt="Nom de l'asso 2" class="asso-logo">
+                    <h4>Cosanostr'Art</h4>
+                    <p>Bon on a perdu... mais en tant que membre sponsor j'ai pu bosser mes pitchs de démarchage comme un grand et surtout bosser mon adaptabilité pendant ces magnifiques campagnes où le sommeil semble être optionnel</p>
+                </div>
+
+                <!-- Logo / Asso 3 -->
+                <div class="asso-item">
+                    <img src="logo-asso-3.png" alt="Nom de l'asso 3" class="asso-logo">
+                    <h4>Bureau des Jeux</h4>
+                    <p>6 mois au BDJ. Asso pas très corpo c'est vrai mais j'ai appris à organiser des évents et gérer les galères avec réactivité (big up à la soirée appartathon)</p>
+                </div>
+
+                <!-- Logo / Asso 4 -->
+                <div class="asso-item">
+                    <img src="logo-asso-4.png" alt="Nom de l'asso 4" class="asso-logo">
+                    <h4>AEIL</h4>
+                    <p>Surement l'asso qui m'a le plus appris. En tant que membre du bureau (comptable) j'ai compris ce que c'est de ne plus avoir de vie et d'avoir un tel qui ressemble de plus en plus à une guirlande à force de recevoir des notifs. Ça m'a permis d'apprendre à gérer les priorités et SURTOUT les imprévus en plus de découvrir la mise en place de plan d'actions, process, stratégie etc.</p>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =========================================================================
+             VUE : PAGE 3 - RESPO CONSULTING
+             ========================================================================= -->
+        <section id="view-page-3" class="view detail-page">
+            <button class="btn-back" onclick="navigateTo('home')">&#8592; Retour à l'accueil</button>
+            <h2 class="page-title">Respo Consulting</h2>
+
+            <!-- Image de Bannière -->
+            <!-- Insérez votre image de bannière ici -->
+            <img src="banniere-respo.png" alt="Bannière Consulting" class="banner-img">
+            
+            <div class="content-block">
+                <!-- Insérez votre texte détaillé ici -->
+                <p>Après m'être renseigné auprès de plusieurs de vos anciens et actuels membres de la JE, ce qui me plait vraiment dans ce poste c'est d'être proche des clients et de comprendre leurs attentes pour pouvoir imaginer à partir de 0 ou presque une prestation complète (Désolé je vous ai volé la photo d'illustration sur votre site haha)</p>
+                
+                <h3>Pourquoi ce poste :</h3>
+                <br>
+                <ul>
+                    <li><strong>Management :</strong> Via mes précédentes expériences asso, j'ai déjà eu l'occasion de manager 21 trésoriers associatifs, et de mener à bien des projets de tailles variables en équipe.</li>
+                    <li><strong>Relations clients :</strong> J'ai déjà eu l'occasion de travailler mes capacités d'argumentation de vente via mon stage chez Hermès en 2e année, et de bosser mes compétences de communication avec l'AEIL et ses prestataires.</li>
+                    <li><strong>Investissement :</strong> L'AEIL m'a pas mal appris à bien gérer mon temps mais aussi à consacrer un temps conséquent pour un projet de manière quotidienne et je suis conscient de l'investissement que demande la Junior Entreprise</li>
+                    <li><strong>Ecoute :</strong> J'aime prendre le temps d'écouter les gens et de comprendre leur fonctionnement (tellement que COMED m'appelle à 8h du mat le week end). Je pense que c'est un point clé pour être respo consulting et bien comprendre les attentes du client.</li>
+                </ul>
+            </div>
+        </section>
+
+
+        <!-- =========================================================================
+             VUE : PAGE 4 - RESPO SUIVI D'ETUDES
+             ========================================================================= -->
+        <section id="view-page-4" class="view detail-page">
+            <button class="btn-back" onclick="navigateTo('home')">&#8592; Retour à l'accueil</button>
+            <h2 class="page-title">Respo Suivi d'études</h2>
+
+            <!-- Image de Bannière -->
+            <!-- Insérez votre image de bannière ici -->
+            <img src="banniere-suivietudes.png" alt="Bannière Compétences" class="banner-img">
+
+            <div class="content-block">
+                <!-- Insérez votre argumentaire ici -->
+                <p>Le poste de Respo Suivi d'études est sûrement l'un des postes le plus en contact avec les intervenants et les clients ce qui me plait énormément. Le fait dêtre la clé finale de la satisfaction client rend le poste très concret et correspond à la vision que j'ai de la JE.</p>
+                
+                <h3>Ma vision du poste :</h3>
+                <br>
+                <ul>
+                    <li><strong>Mise en oeuvre :</strong> Au delà d'imaginer un projet, j'ai toujours aimé partir de rien pour arriver à un résultat concret qui me plait. Ce que plait réellement c'est de voir le projet prendre vie au fur et à mesure et devenir viable.</li>
+                    <li><strong>Formation :</strong> Une partie importante du travail de Respo est aussi la formation. L'idée de travailler en équipe et d'aider les chargés à prendre de l'assurance et devenir de plus en plus autonome est un des aspects qui me motive.</li>
+                    <li><strong>Après-vente :</strong> Le fait de pouvoir fidéliser des clients grâce à une mission bien réalisée et en gardant le contact avec eux est un point je trouve hyper intéressant.</li>
+                </ul>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer Global -->
+    <footer>
+        <p>&copy; 2026 - Ma Carte Blanche.</p>
+    </footer>
+
+    <!-- =========================================================================
+         JAVASCRIPT : LOGIQUE DE NAVIGATION SPA ET ANIMATIONS
+         ========================================================================= -->
+    <script>
+        /**
+         * Fonction principale de navigation dynamique (SPA)
+         * @param {string} targetPage - L'identifiant de la page à afficher ('home', 'page-1', etc.)
+         */
+        function navigateTo(targetPage) {
+            // 1. Sélectionner toutes les vues
+            const views = document.querySelectorAll('.view');
+            
+            // 2. Cacher toutes les vues en retirant la classe 'active'
+            views.forEach(view => {
+                view.classList.remove('active');
+            });
+
+            // 3. Identifier l'ID de la vue à afficher
+            const targetId = targetPage === 'home' ? 'view-home' : `view-${targetPage}`;
+            const targetElement = document.getElementById(targetId);
+
+            // 4. Afficher la nouvelle vue et remonter en haut de page
+            if (targetElement) {
+                targetElement.classList.add('active');
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            }
+        }
+
+        /**
+         * Fonction pour scroller doucement vers la section thématique depuis le Hero
+         */
+        function scrollToThemes() {
+            const themesSection = document.getElementById('themes');
+            if (themesSection) {
+                const headerOffset = 70; // Hauteur du header sticky environ
+                const elementPosition = themesSection.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                window.scrollTo({
+                    top: offsetPosition,
+                    behavior: "smooth"
+                });
+            }
+        }
+    </script>
+</body>
+</html>
